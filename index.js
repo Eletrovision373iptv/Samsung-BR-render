@@ -23,11 +23,25 @@ async function parseM3U() {
                 const info = lines[i];
                 const url = lines[i + 1]?.trim();
                 
-                // Extração de metadados
-                const nomeMatch = info.split(',')[1] || "Canal Sem Nome";
-                const logoMatch = info.match(/tvg-logo="([^"]+)"/);
-                const catMatch = info.match(/group-title="([^"]+)"/);
-                const idMatch = info.match(/tvg-id="([^"]+)"/);
+// Extração de metadados
+const nomeMatch = info.split(',')[1] || "Canal Samsung";
+const logoMatch = info.match(/tvg-logo="([^"]+)"/);
+const catMatch = info.match(/group-title="([^"]+)"/);
+const idMatch = info.match(/tvg-id="([^"]+)"/);
+
+// Link que você encontrou
+const LOGO_SAMSUNG = "https://upload.wikimedia.org/wikipedia/commons/2/28/Samsung_TV_Plus_logo.png";
+
+if (url && url.startsWith('http')) {
+    canais.push({
+        id: idMatch ? idMatch[1] : `samsung-${i}`,
+        nome: nomeMatch.trim(),
+        // Se existir logo no M3U, usa ele. Se não, usa o logo da Samsung que você achou.
+        logo: (logoMatch && logoMatch[1]) ? logoMatch[1] : LOGO_SAMSUNG,
+        categoria: catMatch ? catMatch[1] : 'SAMSUNG TV PLUS',
+        url: url 
+    });
+}
 
                 if (url && url.startsWith('http')) {
                     canais.push({
