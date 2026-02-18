@@ -1,24 +1,24 @@
 import requests
-import re
 
 def gerar():
-    print("Buscando canais Samsung TV Plus Brasil (Modo Direto)...")
-    url = "https://i.mjh.nz/SamsungTVPlus/br.m3u8"
+    print("Buscando canais Samsung TV Plus Brasil (Fonte Taws)...")
+    # Link direto da Taws para Samsung Brasil
+    url = "https://www.taws.com.br/iptv/samsung.m3u"
     
     try:
-        response = requests.get(url, timeout=20)
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        response = requests.get(url, headers=headers, timeout=20)
         response.raise_for_status()
+        
+        # Vamos limpar a lista para garantir que o formato fique perfeito para o seu site
         conteudo = response.text
-
-        # Salva o arquivo diretamente fazendo pequenos ajustes de nome
+        
         with open("lista.m3u", "w", encoding="utf-8") as f:
-            # Ajusta o group-title para ficar bonito no seu painel
-            f.write(conteudo.replace('group-title="', 'group-title="SAMSUNG - '))
+            f.write(conteudo)
             
-        print(f"✅ Sucesso! Lista gerada a partir da fonte M3U8 oficial.")
+        print(f"✅ Sucesso! Lista Samsung gerada com a fonte Taws.")
     except Exception as e:
-        print(f"❌ Erro crítico: {e}")
-        print("DICA: Tente abrir este link no seu navegador: https://i.mjh.nz/SamsungTVPlus/br.m3u8")
+        print(f"❌ Erro: {e}")
 
 if __name__ == "__main__":
     gerar()
