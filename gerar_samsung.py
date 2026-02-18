@@ -1,24 +1,32 @@
 import requests
 
 def gerar():
-    print("Buscando canais Samsung TV Plus Brasil (Fonte Taws)...")
-    # Link direto da Taws para Samsung Brasil
-    url = "https://www.taws.com.br/iptv/samsung.m3u"
+    print("Buscando canais Samsung TV Plus Brasil (Fonte Kodi Brasil)...")
+    # Link direto e funcional
+    url = "https://kodibrasil.net/lista/samsung.m3u"
+    headers = {'User-Agent': 'Mozilla/5.0'}
     
     try:
-        headers = {'User-Agent': 'Mozilla/5.0'}
         response = requests.get(url, headers=headers, timeout=20)
         response.raise_for_status()
         
-        # Vamos limpar a lista para garantir que o formato fique perfeito para o seu site
-        conteudo = response.text
-        
+        # Salva o arquivo baixado
         with open("lista.m3u", "w", encoding="utf-8") as f:
-            f.write(conteudo)
+            f.write(response.text)
             
-        print(f"✅ Sucesso! Lista Samsung gerada com a fonte Taws.")
+        print(f"✅ Sucesso! Lista Samsung gerada (Fonte: Kodi Brasil).")
     except Exception as e:
-        print(f"❌ Erro: {e}")
+        print(f"⚠️ Fonte 1 falhou, tentando fonte reserva...")
+        try:
+            # Fonte Reserva
+            url2 = "https://raw.githubusercontent.com/Lazzarotto-oficial/Lazzarotto-oficial/main/SAMSUNG_TV_PLUS.m3u"
+            res2 = requests.get(url2, headers=headers, timeout=20)
+            res2.raise_for_status()
+            with open("lista.m3u", "w", encoding="utf-8") as f:
+                f.write(res2.text)
+            print("✅ Sucesso com a fonte reserva!")
+        except:
+            print(f"❌ Erro crítico: {e}")
 
 if __name__ == "__main__":
     gerar()
